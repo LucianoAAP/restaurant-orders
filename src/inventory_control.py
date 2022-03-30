@@ -40,6 +40,7 @@ class InventoryControl:
             'misto-quente': ['pao', 'queijo', 'presunto'],
             'coxinha': ['massa', 'frango'],
         }
+        self.cart = set(['hamburguer', 'pizza', 'misto-quente', 'coxinha'])
 
     def add_new_order(self, customer, order, day):
         for ingredient in self.ingredients[order]:
@@ -62,3 +63,16 @@ class InventoryControl:
             in_stock = self.stock[ingredient]
             ingredients_to_buy[ingredient] = minimum_ammount - in_stock
         return ingredients_to_buy
+
+    def get_available_dishes(self):
+        available_dishes = self.cart
+        sold_off_ingredients = set()
+        for ingredient in self.stock:
+            if self.stock[ingredient] == 0:
+                sold_off_ingredients.add(ingredient)
+        for dish in self.ingredients:
+            ingredients = set(self.ingredients[dish])
+            disjointed = ingredients.isdisjoint(sold_off_ingredients)
+            if disjointed is False:
+                available_dishes.discard(dish)
+        return available_dishes
