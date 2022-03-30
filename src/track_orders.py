@@ -13,12 +13,12 @@ class TrackOrders:
 
     def get_most_ordered_dish_per_customer(self, customer):
         customer_orders = {}
-        for row in self.orders:
-            if row[0] == customer:
-                if row[1] in customer_orders:
-                    customer_orders[row[1]] += 1
+        for order in self.orders:
+            if order[0] == customer:
+                if order[1] in customer_orders:
+                    customer_orders[order[1]] += 1
                 else:
-                    customer_orders[row[1]] = 1
+                    customer_orders[order[1]] = 1
         dishes = list(customer_orders.keys())
         counts = list(customer_orders.values())
         most_asked_count = max(counts)
@@ -29,21 +29,24 @@ class TrackOrders:
     def get_never_ordered_per_customer(self, customer):
         total_dishes = set()
         dishes_ordered_by_customer = set()
-        for row in self.orders:
-            if row[1] not in total_dishes:
-                total_dishes.add(row[1])
-            if row[0] == customer and row[1] not in dishes_ordered_by_customer:
-                dishes_ordered_by_customer.add(row[1])
+        for order in self.orders:
+            if order[1] not in total_dishes:
+                total_dishes.add(order[1])
+            if (
+                order[0] == customer
+                and order[1] not in dishes_ordered_by_customer
+               ):
+                dishes_ordered_by_customer.add(order[1])
         return total_dishes.difference(dishes_ordered_by_customer)
 
     def get_days_never_visited_per_customer(self, customer):
         every_day = set()
         days_with_customer = set()
-        for row in self.orders:
-            if row[2] not in every_day:
-                every_day.add(row[2])
-            if row[0] == customer and row[2] not in days_with_customer:
-                days_with_customer.add(row[2])
+        for order in self.orders:
+            if order[2] not in every_day:
+                every_day.add(order[2])
+            if order[0] == customer and order[2] not in days_with_customer:
+                days_with_customer.add(order[2])
         return every_day.difference(days_with_customer)
 
     def get_busiest_day(self):
